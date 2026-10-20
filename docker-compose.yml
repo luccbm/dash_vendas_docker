@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: vendas_db
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: senha123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      DB_HOST: db
+      DB_NAME: vendas_db
+      DB_USER: usuario
+      DB_PASSWORD: senha123
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
